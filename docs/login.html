@@ -126,7 +126,6 @@ function login() {
   const user = document.getElementById("username").value;
   const pass = document.getElementById("password").value;
 
-  // ❌ FAKE SECURITY CHECK (jebakan)
   if (pass.length < 8 || pass.length > 12) {
     document.getElementById("msg").innerText =
       "Password does not meet security policy.";
@@ -152,3 +151,4 @@ function login() {
 </script>
 </body>
 </html>
+
