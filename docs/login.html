@@ -125,10 +125,10 @@
 function login() {
   const user = document.getElementById("username").value;
   const pass = document.getElementById("password").value;
+  const msg = document.getElementById("msg");
 
-  if (pass.length < 8 || pass.length > 12) {
-    document.getElementById("msg").innerText =
-      "Password does not meet security policy.";
+  if (pass.length < 4) {
+    msg.innerText = "Password too short.";
     return;
   }
 
@@ -137,18 +137,28 @@ function login() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username: user, password: pass })
   })
-    .then(r => r.json())
-    .then(d => {
-      document.getElementById("msg").innerText = d.message;
-      if (d.success) location.href = "/dashboard";
-    })
-    .catch(() => {
-      document.getElementById("msg").innerText = "Network error.";
-    });
+  .then(async r => {
+    let data;
+    try {
+      data = await r.json();
+    } catch {
+      throw new Error("Invalid response");
+    }
+    return data;
+  })
+  .then(d => {
+    msg.innerText = d.message;
+    if (d.success) {
+      location.href = "https://main.whiskasreal.workers.dev/dashboard";
+    }
+  })
+  .catch(() => {
+    msg.innerText = "Network or server error.";
+  });
 }
-
 // frontend validation is not enforcement
 </script>
 </body>
 </html>
+
 
